@@ -12,7 +12,7 @@ from tool import readable_size, file_dir, open_in_folder
 
 class DownloadBar(wx.Panel):
 
-    def __init__(self, parent, name, queue, _dict, client):
+    def __init__(self, parent, name,):
 
         super(DownloadBar, self).__init__(parent, name=name)
 
@@ -28,14 +28,13 @@ class DownloadBar(wx.Panel):
 
         self.Bind(wx.EVT_BUTTON, self.OnButton)
 
-        self.niczy = client
-        self.queue = queue
+        self.app = wx.GetApp()
 
     def OnButton(self, event):
         url = self.url.GetValue().split()[0]
         if url.startswith("http://niczy.dgut.edu.cn"):
 
-            video_info = self.niczy.video_info(url)
+            video_info = self.app.client.video_info(url)
             video_name = video_info[u"video_name"]
             file_name = "".join([video_name, ".mp4"])
 
@@ -58,7 +57,7 @@ class DownloadBar(wx.Panel):
                 test = {"file_path": file_path,
                         "url": "http://192.168.199.202:8000/Protel99SE.zip",
                         "file_name": file_path}
-                self.queue.put(job)
+                self.app.task_queue.put(job)
                 video_info["file_path"] = file_path
                 self._update_item(video_info)
         else:
@@ -71,7 +70,7 @@ class DownloadBar(wx.Panel):
         import StringIO
         video_item = wx.FindWindowByName("video_item")
 
-        res = self.niczy.s.get(video_info["poster_url"])
+        res = self.app.client.s.get(video_info["poster_url"])
         stream = StringIO.StringIO(res.content)
         poster_bmp = wx.ImageFromStream(stream).ConvertToBitmap()
         video_item.update_info(video_info, poster_bmp)
@@ -80,20 +79,19 @@ class DownloadBar(wx.Panel):
 
 class VideoItem(wx.Panel):
 
-    def __init__(self, parent, name, queue, _dict, client):
+    def __init__(self, parent, name,):
 
         super(VideoItem, self).__init__(parent, name=name)
 
         # 更新下载进度条
-        self._dict = _dict
-        self.timer = wx.Timer(self)
-        self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
+        
+        # self.timer = wx.Timer(self)
+        # self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
 
         self.m_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizer(self.m_sizer)
 
-        path = "E:\UIDesign\poster.png"
-        bmp = wx.Image(path).ConvertToBitmap()
+        bmp = wx.Image("poster.png").ConvertToBitmap()
         self.poster = wx.StaticBitmap(self, bitmap=bmp)
 
         self.video_name = wx.StaticText(self, label=u"星球大战")
@@ -121,6 +119,8 @@ class VideoItem(wx.Panel):
 
         self.Bind(wx.EVT_BUTTON, self.OnButton, self._dir_btn)
 
+        self.app = wx.GetApp()
+
     def OnButton(self, event):
         _path = self._dir_btn.Name
         open_in_folder(_path)
@@ -134,22 +134,24 @@ class VideoItem(wx.Panel):
         self._dir_btn.SetName(video_info["file_path"])
         self._dir_btn.SetLabel(_file_dir)
         self._dir_btn.Refresh()
-        self.timer.Start(100)
+        # self.timer.Start(100)
         return None
 
-    def OnTimer(self, event):
-        _float = self._dict["done"]
-        if _float is not None:
-            _str = str(_float * 100).split(".")[0]
-            self.download_progress.SetValue(int(_str))
-            if _str == "100":
-                self.timer.Stop()
+    def UpdateGauge(self, done, speed):
+        _str = str(done * 100).split(".")[0]
+        self.download_progress.SetValue(int(_str))
+        if _str == "100":
+            self.WhenDownloaded()
+        self.download_speed = speed
+        self.download_done = int(_str)
         return None
 
+    def WhenDownloaded(self, ):
+        pass
 
 class ADPoster(wx.Panel):
 
-    def __init__(self, parent, name, _dict):
+    def __init__(self, parent, name,):
 
         super(ADPoster, self).__init__(parent, name=name)
 
@@ -226,9 +228,7 @@ class AboutPanel(wx.Panel):
 
         self.gbsizer = wx.GridBagSizer(vgap=5, hgap=5)
 
-        img_dir = "C:\Users\wk\OneDrive\W\QiangGui\img"
-        path = os.path.join(img_dir, "wechat200.jpg")
-        image = wx.Image(path).ConvertToBitmap()
+        image = wx.Image("wechat200.jpg").ConvertToBitmap()
 
         wechat_text = wx.StaticText(self, label=u"微信/WeChat：")
         wechat_bmp = wx.StaticBitmap(self, bitmap=image)
@@ -239,19 +239,6 @@ class AboutPanel(wx.Panel):
         author_text = wx.StaticText(self, label=u"作者/Author：")
         author_name = wx.StaticText(self, label=u"彭未康")
 
-        # school_msg = u"""不知道会不会影响你们的工作，如果给您添麻烦了，抱歉！\n """
-        # to_school = wx.StaticText(self, label=school_msg)
-        # school_text = wx.StaticText(self, label=u"网站管理：")
-#
-        # teacher_msg = u"""证件照和介绍信息是体育系官网找到的，抱歉！如果老师愿意提供靓照，感激不尽。\n """
-        # to_teacher = wx.StaticText(self, label=teacher_msg)
-        # teacher_text = wx.StaticText(self, label=u"亲爱的老师：")
-#
-        # others_msg = u"""希望能帮到你，有什么想法或问题加我微信聊，邮箱也没问题。\n \n """
-        # to_others = wx.StaticText(self, label=others_msg)
-        # others_text = wx.StaticText(self, label=u"同学、朋友：")
-#
-        # 版权声明
         copyright_text = wx.StaticText(self, label=u"版权声明：")
         copyright = wx.StaticText(self, label=u"保留所有权利。")
 

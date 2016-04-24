@@ -13,11 +13,13 @@ class Niczy(object):
         self.s = requests.Session()
         self.s.headers["User-Agent"] = self.user_agent
         
-    def download(self, url, filename, speed=None, done=None):
+    def download(self, url, filename, ):
         u"""
-        :params :speed done multiprocessing Value
+        
         """
         video = self.s.get(url, stream=True, headers={"Range": "bytes=0-"})
+        print video.content
+        print video.headers
         content_length = video.headers["Content-Length"]
 
         start = time.clock()
@@ -28,12 +30,44 @@ class Niczy(object):
             for chunk in video.iter_content(1024):
                 per_end = time.clock()
                 downloaded += 1024
-                done.value = float(downloaded) / float(content_length)
+                done = float(downloaded) / float(content_length)
                 f.write(chunk)
                 duration = per_end - per_start
-                speed.value = 1 / duration
+                speed = 1 / duration
                 per_start = time.clock()        
-        total.value = int(time.clock() - start)
+        total = int(time.clock() - start)
+        return None
+
+    def gui_downloader(self, task_queue, app):
+        # import logging
+        # log = logging.basicConfig(filename="threading.txt")
+        import wx
+        
+
+        while True:
+            # log.error("i am alive")
+
+            job = task_queue.get()
+            video = self.s.get(job["url"], stream=True, headers={"Range": "bytes=0-"})
+            content_length = video.headers["Content-Length"]
+            widget = app.frame.video_item
+            start = time.clock()
+            downloaded = 0
+
+            with open(job["file_path"], "wb") as f:
+                per_start = time.clock()
+                for chunk in video.iter_content(1024):
+                    per_end = time.clock()
+                    downloaded += 1024
+                    done = float(downloaded) / float(content_length)
+                    f.write(chunk)
+                    duration = per_end - per_start
+                    speed = 1 / duration
+                    per_start = time.clock()        
+                    wx.CallAfter(widget.UpdateGauge, done, speed)
+
+                    total = int(time.clock() - start)
+            task_queue.task_done()
         return None
 
     def video_info(self, url):
@@ -125,5 +159,7 @@ def mp_downloader(queue, _dict):
 
 if __name__ == "__main__":
     url = "http://niczy.dgut.edu.cn/index.php?m=content&c=index&a=show&catid=10&id=4488"
+    file_url = "http://niczy.dgut.edu.cn:1680/course_def/res_url/L2xvY2FsbWVkaWEvaW1wb3J0L+W9seinhuaso+i1jy/nu7zoibov5aSn6ZmGL3BhcGnphbEoMjAxNikv@/15%E5%A5%B3%E4%BA%BA%E7%9C%9F%E6%98%AF%E4%B8%8D%E5%A5%BD%E5%81%9A%20_%E8%B6%85%E6%B8%85.mp4_yq.mp4"
     n = Niczy()
     n.video_info(url)
+    n.download(file_url, "auth.mp4")
