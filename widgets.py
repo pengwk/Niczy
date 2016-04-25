@@ -91,14 +91,14 @@ class VideoItem(wx.Panel):
         self.m_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizer(self.m_sizer)
 
-        bmp = wx.Image("poster.png").ConvertToBitmap()
+        bmp = wx.Image("poster.jpg").ConvertToBitmap()
         self.poster = wx.StaticBitmap(self, bitmap=bmp)
 
-        self.video_name = wx.StaticText(self, label=u"星球大战")
+        self.video_name = wx.StaticText(self, label=u"DGUT视频下载")
         self.download_progress = wx.Gauge(self, -1, range=100)
         #self.cancel_btn = wx.Button(self, label=u"取消")
         self.path_label = wx.StaticText(self, label=u"存放在：")
-        self._dir_btn = GenButton.GenButton(self, label=u"E:\字体")
+        self._dir_btn = GenButton.GenButton(self, label=u"桌面", style=wx.BORDER_NONE,size=(-1, 18))
 
         flags = wx.ALIGN_LEFT
         self.file_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -162,18 +162,19 @@ class ADPoster(wx.Panel):
         font = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)
         self.line.SetFont(font)
 
-        bmp = wx.Image("ad.png").ConvertToBitmap()
-        self.ad = wx.StaticBitmap(self, bitmap=bmp)
-        self.ad.Hide()
+        # bmp = wx.Image("ad.png").ConvertToBitmap()
+        # self.ad = wx.StaticBitmap(self, bitmap=bmp)
+        # self.ad.Hide()
 
         msizer = wx.BoxSizer(wx.VERTICAL)
         msizer.AddMany([(self.line, 1, wx.ALL | wx.ALIGN_CENTER, 5),
                         (self.author, 1, wx.ALIGN_RIGHT | wx.ALL, 5),
-                        (self.ad, 1, wx.ALL, 5)])
+                        # (self.ad, 1, wx.ALL, 5)
+                        ])
         self.SetSizer(msizer)
 
-        self.Bind(wx.EVT_ENTER_WINDOW, self.OnEnterWindow)
-        self.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeaveWindow)
+        # self.Bind(wx.EVT_ENTER_WINDOW, self.OnEnterWindow)
+        # self.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeaveWindow)
 
     def OnEnterWindow(self, event):
         print "Enter"

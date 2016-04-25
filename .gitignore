@@ -2,3 +2,4 @@
 /build
 /dist
 *.mp[34]
+*.spec

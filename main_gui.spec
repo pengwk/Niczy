@@ -1,7 +1,10 @@
 # -*- mode: python -*-
 
-block_cipher = None
+block_cipher = pyi_crypto.PyiBlockCipher(key='pengwkiloveyou')
 
+data_file = [("dgut_video_yellow.ico", "."),
+              ("poster.jpg", "."),
+              ("wechat200.jpg", ".")]
 
 a = Analysis(['main_gui.py'],
              pathex=['E:\\temp\\Niczy'],
@@ -21,8 +24,10 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='main_gui',
+          name=u'DGUT VIDEO Downloader',
           debug=False,
           strip=False,
-          upx=True,
-          console=True , icon='dgut_video.ico')
+          upx=False,
+          console=False,
+          version='version.txt', 
+          icon='dgut_video_yellow.ico')

@@ -9,7 +9,7 @@ import wx
 
 import widgets
 
-from niczy_client import Niczy, mp_downloader
+from niczy_client import Niczy
 
 
 class Frame(wx.Frame):
@@ -35,7 +35,7 @@ class Frame(wx.Frame):
         self._set_icon()
 
     def _set_icon(self, ):
-        icon = wx.Icon("dgut_video.ico")
+        icon = wx.Icon("dgut_video_yellow.ico")
         self.SetIcon(icon)
 
 
