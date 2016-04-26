@@ -8,6 +8,7 @@ import wx
 # import wx.lib.inspection
 
 import widgets
+import resource
 
 from niczy_client import Niczy
 
@@ -34,10 +35,17 @@ class Frame(wx.Frame):
 
         self._set_icon()
 
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
     def _set_icon(self, ):
-        icon = wx.Icon("dgut_video_yellow.ico")
+        icon = wx.Icon(resource.ico_dgut)
         self.SetIcon(icon)
 
+    def OnClose(self, event):
+        app = wx.GetApp()
+        app.task_queue.put("stop")
+        app.worker.join()
+        self.Destroy()
 
 class App(wx.App):
 
@@ -48,6 +56,7 @@ class App(wx.App):
         
         self.worker = Thread(target=self.client.gui_downloader, args=(self.task_queue, self))
         self.worker.start()
+
         super(App, self).__init__(
             redirect, filename, useBestVisual, clearSigInt)
         
@@ -61,6 +70,8 @@ class App(wx.App):
         
         # wx.lib.inspection.InspectionTool().Show()
         return True
+
+
 
 
 if __name__ == "__main__":

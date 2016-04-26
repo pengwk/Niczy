@@ -6,6 +6,7 @@ import webbrowser
 import wx
 import wx.lib.buttons as GenButton
 
+import resource
 from niczy_client import Niczy
 from tool import readable_size, file_dir, open_in_folder
 
@@ -91,14 +92,14 @@ class VideoItem(wx.Panel):
         self.m_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizer(self.m_sizer)
 
-        bmp = wx.Image("poster.jpg").ConvertToBitmap()
+        bmp = wx.Image(resource.img_poster).ConvertToBitmap()
         self.poster = wx.StaticBitmap(self, bitmap=bmp)
 
         self.video_name = wx.StaticText(self, label=u"DGUT视频下载")
         self.download_progress = wx.Gauge(self, -1, range=100)
         #self.cancel_btn = wx.Button(self, label=u"取消")
         self.path_label = wx.StaticText(self, label=u"存放在：")
-        self._dir_btn = GenButton.GenButton(self, label=u"桌面", style=wx.BORDER_NONE,size=(-1, 18))
+        self._dir_btn = GenButton.GenButton(self, label=u" ", style=wx.BORDER_NONE,size=(-1, 18))
 
         flags = wx.ALIGN_LEFT
         self.file_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -229,7 +230,7 @@ class AboutPanel(wx.Panel):
 
         self.gbsizer = wx.GridBagSizer(vgap=5, hgap=5)
 
-        image = wx.Image("wechat200.jpg").ConvertToBitmap()
+        image = wx.Image(resource.img_wechat200).ConvertToBitmap()
 
         wechat_text = wx.StaticText(self, label=u"微信/WeChat：")
         wechat_bmp = wx.StaticBitmap(self, bitmap=image)

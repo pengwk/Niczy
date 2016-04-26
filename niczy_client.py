@@ -48,6 +48,9 @@ class Niczy(object):
             # log.error("i am alive")
 
             job = task_queue.get()
+            if job == "stop":
+                task_queue.task_done()
+                return None
             video = self.s.get(job["url"], stream=True, headers={"Range": "bytes=0-"})
             content_length = video.headers["Content-Length"]
             widget = app.frame.video_item
@@ -63,7 +66,13 @@ class Niczy(object):
                     f.write(chunk)
                     duration = per_end - per_start
                     speed = 1 / duration
-                    per_start = time.clock()        
+                    per_start = time.clock() 
+                    try:
+                        job = task_queue.get_nowait()
+                        if job == "stop":
+                            return None       
+                    except Queue.Empty, e:
+                        pass       
                     wx.CallAfter(widget.UpdateGauge, done, speed)
 
                     total = int(time.clock() - start)
