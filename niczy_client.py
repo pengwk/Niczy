@@ -2,7 +2,7 @@
 
 import time
 import requests
-
+import Queue
 from bs4 import BeautifulSoup
 
 
