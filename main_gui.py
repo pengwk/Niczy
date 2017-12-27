@@ -27,9 +27,9 @@ class Frame(wx.Frame):
         self.m_sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.m_sizer.AddMany([(self.contact_author, 0, wx.EXPAND),
-                                (self.url_input, 0, wx.ALL | wx.EXPAND, 5),
-                              (self.video_item, 1, wx.ALL | wx.EXPAND, 5),
-                              (self.ad_poster, 1, wx.ALL | wx.EXPAND, 5)])
+                                (self.url_input, 0, wx.ALL | wx.EXPAND, 2),
+                              (self.video_item, 5, wx.ALL | wx.EXPAND, 2),
+                              (self.ad_poster, 3, wx.ALL | wx.EXPAND, 2)])
 
         self.SetSizer(self.m_sizer)
 

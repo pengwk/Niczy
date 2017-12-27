@@ -160,7 +160,7 @@ class ADPoster(wx.Panel):
             self, label=u"  后来许多人问我一个人夜晚踟蹰路上的心情，我想起的却不是孤单和路长，而是波澜壮阔的海和天空中闪耀的星光。")
         self.author = wx.StaticText(self, label=u"张小砚")
 
-        font = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)
+        font = wx.Font(11, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
         self.line.SetFont(font)
 
         # bmp = wx.Image("ad.png").ConvertToBitmap()

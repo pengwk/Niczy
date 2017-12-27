@@ -30,12 +30,12 @@ VSVersionInfo(
       StringTable(
         u'000004b0',
         [StringStruct(u'CompanyName', u'彭未康'),
-        StringStruct(u'FileDescription', u'东莞理工学院视频下载器'),
+        StringStruct(u'FileDescription', u'DGUT视频下载'),
         StringStruct(u'FileVersion', u'1.0.0.1'),
-        StringStruct(u'InternalName', u'东莞理工学院视频下载器'),
+        StringStruct(u'InternalName', u'DGUT视频下载'),
         StringStruct(u'LegalCopyright', u'Copyright©2016-2018 彭未康.  All rights reserved.'),
-        StringStruct(u'OriginalFilename', u'东莞理工学院视频下载器.exe'),
-        StringStruct(u'ProductName', u'东莞理工学院视频下载器'),
+        StringStruct(u'OriginalFilename', u'DGUT视频下载.exe'),
+        StringStruct(u'ProductName', u'DGUT视频下载'),
         StringStruct(u'ProductVersion', u'1.0.0.1')])
       ]), 
     VarFileInfo([VarStruct(u'Translation', [0, 1200])])

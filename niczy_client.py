@@ -76,6 +76,7 @@ class Niczy(object):
                     wx.CallAfter(widget.UpdateGauge, done, speed)
 
                     total = int(time.clock() - start)
+            wx.Bell()
             task_queue.task_done()
         return None
 
